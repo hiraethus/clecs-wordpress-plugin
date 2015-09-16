@@ -21,8 +21,7 @@ function log_me($message) {
 
 
 class ClecsPoster {
-    static function post_to_clecs() {
-        log_me('ClecsPoster::post_to_clecs()');
+    static function retrieve_access_token() {
         log_me('Logging in');
         $login_fields = array (
             'username'      => '',
@@ -43,6 +42,15 @@ class ClecsPoster {
         log_me( 'curl_error: ' . curl_error($ch) );
 
         curl_close($ch);
+
+        $result = json_decode($response);
+
+        return $result->{'access_token'};
+    }
+
+    static function post_to_clecs() {
+        log_me('ClecsPoster::post_to_clecs()');
+        $access_token = self::retrieve_access_token();
     }
 }
 
