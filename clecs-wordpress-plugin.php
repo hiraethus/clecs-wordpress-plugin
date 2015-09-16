@@ -23,8 +23,28 @@ function log_me($message) {
 class ClecsPoster {
     static function post_to_clecs() {
         log_me('ClecsPoster::post_to_clecs()');
+        log_me('Logging in');
+        $login_fields = array (
+            'username'      => '',
+            'password'      => '',
+            'grant_type'    => 'password'
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.clecs.cymru/Token');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($login_fields));
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        log_me( 'HTTP code: ' . $httpcode );
+        log_me( 'result: ' . $response );
+        log_me( 'curl_error: ' . curl_error($ch) );
+
+        curl_close($ch);
     }
 }
 
-add_action( 'publish_post', array('ClecsPoster', 'post_to_clecs') );
+add_action( 'publish_post', array('ClecsPoster', 'post_to_clecs'));
 ?>
