@@ -51,6 +51,20 @@ class ClecsPoster {
     static function post_to_clecs() {
         log_me('ClecsPoster::post_to_clecs()');
         $access_token = self::retrieve_access_token();
+        $fields = array (
+            'PostText' => 'Lorem ipsum dolor sit amet'
+        );
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://www.clecs.cymru/api/Posting/PostAPost');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+        curl_setopt($ch, CURLOPT_HTTPHEADER,
+            array( 'Content-Type: application/x-www-form-urlencoded',
+            "Authorization: Bearer $access_token"));
+
+        curl_exec($ch);
+        curl_close($ch);
     }
 }
 
