@@ -52,7 +52,7 @@ class ClecsPoster {
         log_me('ClecsPoster::post_to_clecs()');
         $access_token = self::retrieve_access_token();
         $fields = array (
-            'PostText' => 'Diweddariad blog newydd: ' . $post->post_title . ' ' . get_permalink( $ID )
+            'PostText' => 'Diweddariad blog: ' . $post->post_title . ' ' . get_permalink( $ID )
         );
 
         $ch = curl_init();
