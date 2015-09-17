@@ -48,11 +48,11 @@ class ClecsPoster {
         return $result->{'access_token'};
     }
 
-    static function post_to_clecs() {
+    static function post_to_clecs( $ID, $post ) {
         log_me('ClecsPoster::post_to_clecs()');
         $access_token = self::retrieve_access_token();
         $fields = array (
-            'PostText' => 'Lorem ipsum dolor sit amet'
+            'PostText' => 'Diweddariad blog newydd: ' . $post->post_title . ' ' . get_permalink( $ID )
         );
 
         $ch = curl_init();
@@ -68,5 +68,5 @@ class ClecsPoster {
     }
 }
 
-add_action( 'publish_post', array('ClecsPoster', 'post_to_clecs'));
+add_action( 'publish_post', array('ClecsPoster', 'post_to_clecs'), 10, 2 );
 ?>
