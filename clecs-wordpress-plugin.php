@@ -24,8 +24,8 @@ class ClecsPoster {
     static function retrieve_access_token() {
         log_me('Logging in');
         $login_fields = array (
-            'username'      => '',
-            'password'      => '',
+            'username'      => get_option('clecs_username'),
+            'password'      => get_option('clecs_password'),
             'grant_type'    => 'password'
         );
 
@@ -69,4 +69,46 @@ class ClecsPoster {
 }
 
 add_action( 'publish_post', array('ClecsPoster', 'post_to_clecs'), 10, 2 );
+add_action( 'admin_menu', 'clecs_create_settings_menu' );
+
+function clecs_create_settings_menu() {
+    add_menu_page( 'Ategyn Clecs', 'Gosodiadau Clecs', 'administrator', __FILE__,
+        'clecs_settings_page');
+
+    add_action( 'admin_init', 'register_clecs_settings');
+}
+
+function register_clecs_settings() {
+    register_setting( 'clecs-settings-group', 'clecs_username' );
+    register_setting( 'clecs-settings-group', 'clecs_password' );
+}
+
+function clecs_settings_page() {
+?>
+<div class="wrap">
+<h2>Clecs</h2>
+
+<form method="post" action="options.php">
+    <?php settings_fields( 'clecs-settings-group' ); ?>
+    <?php do_settings_sections( 'clecs-settings-group' ); ?>
+
+    <table class="form-table">
+        <tr valign="top">
+            <th scope="row">Ebost</th>
+            <td><input type="text" name="clecs_username" value="<?php echo esc_attr(get_option('clecs_username')); ?>"</td>
+        </tr>
+
+        <tr valign="top">
+            <th scope="row">Password</th>
+            <td><input type="password" name="clecs_password" value="<?php echo esc_attr(get_option('clecs_password')); ?>"</td>
+        </tr>
+    </table>
+
+    <?php submit_button(); ?>
+</form>
+
+</div>
+<?php
+}
+
 ?>
